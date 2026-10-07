@@ -1,0 +1,41 @@
+plugins { id 'com.android.application' }
+
+android {
+    namespace 'com.jarvis.assistant'
+    compileSdk 35
+
+    defaultConfig {
+        applicationId 'com.jarvis.assistant'
+        minSdk 26
+        targetSdk 35
+        versionCode 4
+        versionName '2.2'
+    }
+
+    signingConfigs {
+        release {
+            if (System.getenv('JARVIS_KEYSTORE_FILE') != null) {
+                storeFile file(System.getenv('JARVIS_KEYSTORE_FILE'))
+                storePassword System.getenv('JARVIS_KEYSTORE_PASSWORD')
+                keyAlias System.getenv('JARVIS_KEY_ALIAS')
+                keyPassword System.getenv('JARVIS_KEY_PASSWORD')
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            // GitHub Actions supplies the signing credentials. If they are absent,
+            // use the normal unsigned release variant rather than failing configuration.
+            if (System.getenv('JARVIS_KEYSTORE_FILE') != null) {
+                signingConfig signingConfigs.release
+            }
+            minifyEnabled false
+        }
+    }
+}
+
+dependencies {
+    implementation 'androidx.appcompat:appcompat:1.7.0'
+    implementation 'com.google.android.material:material:1.12.0'
+}
