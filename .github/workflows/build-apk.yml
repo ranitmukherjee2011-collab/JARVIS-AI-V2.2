@@ -1,4 +1,4 @@
-name: Build JARVIS APK
+name: Build JARVIS AAB
 
 on:
   workflow_dispatch:
@@ -38,12 +38,12 @@ jobs:
           echo "$JARVIS_KEYSTORE_BASE64" | base64 --decode > "$RUNNER_TEMP/jarvis-release.jks"
           echo "JARVIS_KEYSTORE_FILE=$RUNNER_TEMP/jarvis-release.jks" >> "$GITHUB_ENV"
 
-      - name: Build signed JARVIS release APK
-        run: gradle assembleRelease --no-daemon
+      - name: Build signed JARVIS release AAB
+        run: gradle bundleRelease --no-daemon
 
-      - name: Upload signed release APK
+      - name: Upload signed release AAB
         uses: actions/upload-artifact@v4
         with:
-          name: JARVIS-V2.2-release-apk
-          path: app/build/outputs/apk/release/app-release.apk
+          name: JARVIS-V2.2-release-aab
+          path: app/build/outputs/bundle/release/app-release.aab
           if-no-files-found: error
